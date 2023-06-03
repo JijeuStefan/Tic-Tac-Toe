@@ -1,5 +1,3 @@
-<%@ page import="com.example.tictactoe2.Domain.User" %>
-<%@ page import="com.example.tictactoe2.Controller.Listener.SessionListener" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -11,7 +9,7 @@
     response.sendRedirect(request.getContextPath() + "/success.jsp");
     }
 %>
-<form action="login" method="post">
+<form action="Login" method="post">
     Enter username : <input type="text" name="username"> <BR>
     Enter password : <input type="password" name="password"> <BR>
     <input type="submit" value="Login"/>

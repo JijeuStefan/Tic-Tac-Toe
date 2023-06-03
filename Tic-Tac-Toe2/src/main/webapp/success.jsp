@@ -7,6 +7,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="success.css">
     <script src="https://kit.fontawesome.com/61e4c47e6d.js" crossorigin="anonymous"></script>
+    <script src="js/http_calls.js"></script>
 </head>
 <body>
     <div id="header">
@@ -40,6 +41,12 @@
     </div>
     <script>
         $(document).ready(function (){
+            pollForUpdates(function (response){
+                for (let i = 0; i < 9; i ++){
+                    $("#"+i+"").html(response[i].symbol);
+                }
+            });
+
             $("#log_out").click(function () {
                 $.ajax({
                    type: "GET",
@@ -49,13 +56,26 @@
             });
 
             $(".select-button").click(function (){
-                const cell_id = $(this).attr('id');
                 if ($(this).is(':empty')){
-                    $(this).html('S');
+                    var is_turn = '<%=user.getTurn()%>';
+                    alert(is_turn);
+                    if (is_turn === 'true') {
+                        const cell_id = $(this).attr('id');
+                        const symbol = '<%= user.getSymbol()%>';
+                        make_move(cell_id, symbol, function (response){
+                            if ($.trim(response)){
+                                if (response !== "X" && response !== "O")
+                                    alert(response);
+                            }
+                        });
+                        $(this).html(symbol);
+                    }
+                    else {
+                        alert('Not your turn!');
+                    }
                 }
-
             });
-        });
+        })
     </script>
 </body>
 </html>

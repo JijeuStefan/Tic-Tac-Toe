@@ -4,7 +4,7 @@ public class User {
     private final int id;
     private final String username;
     private String symbol;
-    private boolean turn = false;
+    private boolean turn;
 
     public User(int id, String username) {
         this.id = id;

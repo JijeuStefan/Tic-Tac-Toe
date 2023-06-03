@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet("/login")
+@WebServlet("/Login")
 public class Login extends HttpServlet {
 
     public Login() {super();}
@@ -41,8 +41,10 @@ public class Login extends HttpServlet {
                     if (SessionListener.getActiveSessions() == 1) {
                         user.setSymbol("X");
                         user.setTurn(true);
-                    } else if (SessionListener.getActiveSessions() == 2)
+                    } else if (SessionListener.getActiveSessions() == 2) {
                         user.setSymbol("O");
+                        user.setTurn(false);
+                    }
 
                     session.setAttribute("user", user);
 

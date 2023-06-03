@@ -1,23 +1,26 @@
 package com.example.tictactoe2.Controller.GameLogic;
 
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-//import org.json.simple.JSONArray;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Objects;
 
-@WebServlet("/move")
+@WebServlet("/GameServlet")
 public class GameServlet extends HttpServlet {
 
-    GameServlet(){super();}
+    public GameServlet() {super();}
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int row = Integer.parseInt(request.getParameter("id")) / 3;
         int col = Integer.parseInt(request.getParameter("id")) % 3;
         String symb = request.getParameter("symb");
@@ -29,28 +32,29 @@ public class GameServlet extends HttpServlet {
         if (Game.game_draw())
             out.println("Game is a draw!");
 
-        if (Game.game_won())
-            out.println("Game is won!");
+        if (Game.game_won() != null)
+            out.println(Game.game_won());
 
         out.flush();
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        String[][] table = Game.get_table();
-//        JSONArray jsonTable = new JSONArray();
-//        for (String[] row: table) {
-//            for (String elem: row){
-//            JSONObject jObj = new JSONObject();
-//            jObj.put("id", asset.getId());
-//            jObj.put("userid", asset.getUserid());
-//            jObj.put("description", asset.getDescription());
-//            jObj.put("value", asset.getValue());
-//            jsonAssets.add(jObj);
-//            }
-//        }
-//        PrintWriter out = new PrintWriter(response.getOutputStream());
-//        out.println(jsonTable.toJSONString());
-//        out.flush();
+        String[][] table = Game.get_table();
+        JSONArray jsonTable = new JSONArray();
+        for (String[] row: table) {
+            for (String elem: row){
+            JSONObject jObj = new JSONObject();
+            jObj.put("symbol",elem);
+            jsonTable.add(jObj);
+            }
+        }
+
+        PrintWriter out = new PrintWriter(response.getOutputStream());
+        response.setContentType("application/json");
+        out.println(jsonTable.toJSONString());
+        out.flush();
     }
 }
+
+
