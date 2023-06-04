@@ -1,7 +1,7 @@
 package com.example.tictactoe2.Controller.GameLogic;
 
 
-import jakarta.servlet.ServletException;
+import com.example.tictactoe2.Listener.SessionListener;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,8 +11,6 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Objects;
 
 @WebServlet("/GameServlet")
 public class GameServlet extends HttpServlet {
@@ -20,12 +18,13 @@ public class GameServlet extends HttpServlet {
     public GameServlet() {super();}
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int row = Integer.parseInt(request.getParameter("id")) / 3;
         int col = Integer.parseInt(request.getParameter("id")) % 3;
         String symb = request.getParameter("symb");
 
         Game.make_move(row,col,symb);
+        SessionListener.change_turns();
 
         PrintWriter out = new PrintWriter(response.getOutputStream());
 

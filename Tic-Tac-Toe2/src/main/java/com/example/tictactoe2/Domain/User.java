@@ -4,7 +4,7 @@ public class User {
     private final int id;
     private final String username;
     private String symbol;
-    private boolean turn;
+    private boolean turn = false;
 
     public User(int id, String username) {
         this.id = id;
@@ -23,8 +23,8 @@ public class User {
 
     public String getSymbol() {return symbol;}
 
-    public void setTurn(boolean turn) {
-        this.turn = turn;
+    public void setTurn() {
+        this.turn = !turn;
     }
 
     public boolean getTurn() {

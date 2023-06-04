@@ -1,11 +1,13 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false"%>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Tic-tac-toe</title>
 </head>
 <body>
-<% if (session.getAttribute("user") != null) {
+<%
+    HttpSession session = request.getSession(false);
+    if (session != null) {
     response.sendRedirect(request.getContextPath() + "/success.jsp");
     }
 %>

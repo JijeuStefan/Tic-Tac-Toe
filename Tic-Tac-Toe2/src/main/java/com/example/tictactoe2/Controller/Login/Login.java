@@ -1,6 +1,6 @@
 package com.example.tictactoe2.Controller.Login;
 
-import com.example.tictactoe2.Controller.Listener.SessionListener;
+import com.example.tictactoe2.Listener.SessionListener;
 import com.example.tictactoe2.DataBase.DataBase;
 import com.example.tictactoe2.Domain.User;
 import jakarta.servlet.RequestDispatcher;
@@ -31,24 +31,24 @@ public class Login extends HttpServlet {
         User user = db.authenticate(username,password);
 
         if (user != null) {
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
 
             if (SessionListener.getActiveSessions() == 3) {
+                session.invalidate();
                 rd = request.getRequestDispatcher("/error.jsp");
             } else {
 
                 if (session.getAttribute("user") == null) {
                     if (SessionListener.getActiveSessions() == 1) {
                         user.setSymbol("X");
-                        user.setTurn(true);
+                        user.setTurn();
                     } else if (SessionListener.getActiveSessions() == 2) {
                         user.setSymbol("O");
-                        user.setTurn(false);
                     }
 
                     session.setAttribute("user", user);
 
-                    SessionListener.user_login(user.getId());
+                    SessionListener.user_login(user);
                 }
 
                 rd = request.getRequestDispatcher("/success.jsp");
@@ -64,7 +64,7 @@ public class Login extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
 
         User user = (User) session.getAttribute("user");
         SessionListener.user_logout(user.getId());

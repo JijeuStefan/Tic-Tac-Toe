@@ -39,6 +39,10 @@ body{
     margin: -45px auto auto;
 }
 
+#game-table{
+    display: none;
+}
+
 .select-button{
     margin: 5px;
     height: 100px;
