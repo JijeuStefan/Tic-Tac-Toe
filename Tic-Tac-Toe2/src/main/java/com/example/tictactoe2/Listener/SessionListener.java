@@ -60,6 +60,6 @@ public class SessionListener implements HttpSessionListener {
 
     public static void change_turns(){
         for (User user : activeUsers)
-            user.setTurn();
+            user.setTurn(!user.getTurn());
     }
 }

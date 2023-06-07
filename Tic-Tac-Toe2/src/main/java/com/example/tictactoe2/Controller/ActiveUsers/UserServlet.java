@@ -16,10 +16,19 @@ public class UserServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String action = request.getParameter("action");
+
         int id = Integer.parseInt(request.getParameter("id"));
 
         PrintWriter out = new PrintWriter(response.getOutputStream());
-        out.println(SessionListener.get_user(id).getTurn());
-        out.flush();
+
+        if (action!= null && action.equals("turn")) {
+            out.println(SessionListener.get_user(id).getTurn());
+            out.flush();
+        }
+        else if(action!= null && action.equals("symbol")) {
+            out.println(SessionListener.get_user(id).getSymbol());
+            out.flush();
+        }
     }
 }

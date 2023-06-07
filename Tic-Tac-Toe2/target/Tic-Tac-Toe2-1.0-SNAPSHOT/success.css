@@ -31,6 +31,9 @@ body{
 
 #announcer{
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     font-size: 3em;
     font-weight: bold;
 }
@@ -39,7 +42,7 @@ body{
     margin: -45px auto auto;
 }
 
-#game-table{
+#game_table{
     display: none;
 }
 

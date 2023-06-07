@@ -1,7 +1,7 @@
 package com.example.tictactoe2.Controller.Login;
 
 import com.example.tictactoe2.Listener.SessionListener;
-import com.example.tictactoe2.DataBase.DataBase;
+import com.example.tictactoe2.Model.DataBase;
 import com.example.tictactoe2.Domain.User;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -31,27 +31,32 @@ public class Login extends HttpServlet {
         User user = db.authenticate(username,password);
 
         if (user != null) {
-            HttpSession session = request.getSession(true);
+            HttpSession session = request.getSession();
 
-            if (SessionListener.getActiveSessions() == 3) {
-                session.invalidate();
-                rd = request.getRequestDispatcher("/error.jsp");
-            } else {
+            if (SessionListener.is_user_logged(user.getId())){
+                user = SessionListener.get_user(user.getId());
 
-                if (session.getAttribute("user") == null) {
-                    if (SessionListener.getActiveSessions() == 1) {
+                session.setAttribute("user", user);
+                rd = request.getRequestDispatcher("/success.jsp");
+            }
+            else {
+                if (SessionListener.getActiveUsers().size() == 2) {
+                    session.invalidate();
+                    rd = request.getRequestDispatcher("/error.jsp");
+                } else {
+
+                    if (SessionListener.getActiveUsers().size() == 0) {
                         user.setSymbol("X");
-                        user.setTurn();
-                    } else if (SessionListener.getActiveSessions() == 2) {
+                        user.setTurn(true);
+                    } else if (SessionListener.getActiveUsers().size() == 1)
                         user.setSymbol("O");
-                    }
+
+                    SessionListener.user_login(user);
 
                     session.setAttribute("user", user);
 
-                    SessionListener.user_login(user);
+                    rd = request.getRequestDispatcher("/success.jsp");
                 }
-
-                rd = request.getRequestDispatcher("/success.jsp");
             }
 
         }
@@ -62,8 +67,7 @@ public class Login extends HttpServlet {
         rd.forward(request,response);
     }
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
 
         User user = (User) session.getAttribute("user");

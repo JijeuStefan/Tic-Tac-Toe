@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,8 +6,8 @@
 </head>
 <body>
 <%
-    HttpSession session = request.getSession(false);
-    if (session != null) {
+    session = request.getSession(true);
+    if (session.getAttribute("user") != null) {
     response.sendRedirect(request.getContextPath() + "/success.jsp");
     }
 %>

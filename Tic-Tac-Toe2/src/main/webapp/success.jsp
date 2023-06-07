@@ -1,5 +1,4 @@
 <%@ page import="com.example.tictactoe2.Domain.User" %>
-<%@ page import="com.example.tictactoe2.Listener.SessionListener" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <html>
 <head>
@@ -18,10 +17,12 @@
         <% User user = (User) session.getAttribute("user");
             out.println("Welcome " + user.getUsername() +" !");
         %>
+        <div id="game_status">
+        </div>
     </div>
     <div id="game">
         <span id="waiting">Waiting for the second player to login...</span>
-        <table id="game-table" >
+        <table id="game_table" >
             <tr>
                 <td><button class="select-button" id="0"></button></td>
                 <td><button class="select-button" id="1"></button></td>
@@ -44,53 +45,56 @@
     $(document).ready(function (){
         $("#log_out").click(function () {
             log_out();
+            make_move('reset');
         })
 
-        get_sessions(function (response,intervalID){
-            if ($.trim(response) === '2') {
+        get_sessions(function (response){
+            if ($.trim(response) === '1') {
+                $('#waiting').show();
+                $('#game_table').hide();
+            } else if ($.trim(response) === '2') {
                 $('#waiting').hide();
-                $('#game-table').show();
+                $('#game_table').show();
 
-                clearInterval(intervalID);
-
-                pollForUpdates(function (response){
+                pollForUpdates('table',function (response){
                     for (let i = 0; i < 9; i ++){
-                        $("#"+i+"").html(response[i].symbol);
+                        $("#"+i).html(response[i].symbol);
                     }
+                })
+
+                pollForUpdates('status',function (response){
+                    getUserTurnSymbol('symbol',<%=user.getId()%>,function (symbol){
+                    if ($.trim(response)) {
+                        if ($.trim(response) === "X" || $.trim(response) === "O") {
+                            if ($.trim(symbol) === $.trim(response))
+                                $("#game_status").html("You won!");
+                            else
+                                $("#game_status").html("You lost!");
+                        } else
+                            $("#game_status").html("Game is a draw!");
+                        setTimeout(function() {
+                            make_move('reset');
+                            $("#game_status").html("");
+                        }, 5000);
+                    }})
                 })
             }
         })
 
         $(".select-button").click(function (){
             if ($(this).is(':empty')){
-
-
-                <%--$.ajax({--%>
-                <%--    url: 'UserServlet',--%>
-                <%--    method: 'GET',--%>
-                <%--    data: {id: <%=user.getId()%>},--%>
-                <%--    success: function (response){--%>
-                <%--        user_move(response)--%>
-                <%--    }--%>
-                <%--})--%>
-
                 const cell_id = $(this).attr('id');
-                const symbol = '<%= user.getSymbol()%>';
-                make_move(cell_id, symbol, function (response) {
-                    if ($.trim(response)) {
-                        if ($.trim(response) === "X" || $.trim(response) === "O") {
-                            if (symbol === $.trim(response))
-                                $("#announcer").append('You won!');
-                            else
-                                $("#announcer").append('You lost!');
-                        } else
-                            $("#announcer").append('Game is a draw!');
-                    }
-                });
-                $(this).html(symbol);
-
-            }
-        });
+                getUserTurnSymbol('symbol',<%=user.getId()%>,function (symbol){
+                    getUserTurnSymbol('turn',<%=user.getId()%>,function (turn){
+                        if ($.trim(turn) === 'true') {
+                            make_move('move',cell_id, $.trim(symbol));
+                            $("#"+cell_id).html($.trim(symbol));
+                        }
+                        else
+                            alert('Not your turn!');
+                    })
+                })
+            }});
 
     })
 </script>

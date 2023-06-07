@@ -1,7 +1,7 @@
 package com.example.tictactoe2.Controller.GameLogic;
 
 
-import com.example.tictactoe2.GameTable.Table;
+import com.example.tictactoe2.Controller.GameTable.Table;
 
 import java.util.Objects;
 
@@ -13,6 +13,9 @@ public class Game{
     }
 
     public static boolean game_draw(){
+        if (game_won() != null)
+            return false;
+
         for (String[] row : game_table.getTable()) {
             for (String elem : row) {
                 if (Objects.equals(elem, ""))
@@ -37,7 +40,7 @@ public class Game{
             return table[0][0];
 
         if (!Objects.equals(table[0][2], "") && Objects.equals(table[0][2], table[1][1]) && Objects.equals(table[1][1], table[2][0]))
-            return table[0][2];;
+            return table[0][2];
 
         return null;
     }
@@ -45,6 +48,8 @@ public class Game{
     public static void make_move(int row, int col, String symb){
         game_table.add_move(row,col,symb);
     }
+
+    public static void reset(){game_table.reset_table();}
 
     public static String[][] get_table() {return game_table.getTable();}
 

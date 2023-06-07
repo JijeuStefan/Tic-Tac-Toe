@@ -23,8 +23,8 @@ public class User {
 
     public String getSymbol() {return symbol;}
 
-    public void setTurn() {
-        this.turn = !turn;
+    public void setTurn(boolean turn) {
+        this.turn = turn;
     }
 
     public boolean getTurn() {
