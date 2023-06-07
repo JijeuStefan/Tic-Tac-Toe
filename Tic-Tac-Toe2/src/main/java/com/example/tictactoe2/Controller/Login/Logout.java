@@ -19,8 +19,10 @@ public class Logout extends HttpServlet {
         User user = (User) session.getAttribute("user");
         SessionListener.user_logout(user.getId());
 
-        SessionListener.getActiveUsers().get(0).setTurn(true);
-        SessionListener.getActiveUsers().get(0).setSymbol("X");
+        if (SessionListener.getActiveUsers().size() != 0) {
+            SessionListener.getActiveUsers().get(0).setTurn(true);
+            SessionListener.getActiveUsers().get(0).setSymbol("X");
+        }
 
         request.getSession().invalidate();
     }

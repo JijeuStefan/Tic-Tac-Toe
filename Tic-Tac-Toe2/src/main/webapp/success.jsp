@@ -72,10 +72,12 @@
                                 $("#game_status").html("You lost!");
                         } else
                             $("#game_status").html("Game is a draw!");
+                        $(".select-button").prop("disabled", true);
                         setTimeout(function() {
                             make_move('reset');
                             $("#game_status").html("");
-                        }, 5000);
+                            $(".select-button").prop("disabled", false);
+                        }, 3000);
                     }})
                 })
             }

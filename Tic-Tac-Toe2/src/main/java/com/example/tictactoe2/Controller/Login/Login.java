@@ -27,6 +27,11 @@ public class Login extends HttpServlet {
 
         RequestDispatcher rd;
 
+        if (username == null) {
+            rd = request.getRequestDispatcher("/index.jsp");
+            rd.forward(request,response);
+        }
+
         DataBase db = new DataBase();
         User user = db.authenticate(username,password);
 
