@@ -11,10 +11,7 @@ This project was developed as a learning exercise to practice backend web develo
 ## 🎬 Demo
 
 ### ⚙️ Gameplay Demo
-![Gameplay Demo](./assets/WhileDemo.gif)
-
-### 💾 Real-Time Updates Demo
-![Updates Demo](./assets/HeapAllocDemo.gif)
+![Gameplay Demo](./assets/TicTacToeDemo.gif)
 
 ## ✨ Features
 
